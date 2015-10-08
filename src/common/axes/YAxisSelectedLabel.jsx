@@ -39,7 +39,7 @@ module.exports = React.createClass({
       verticalTransform:   'rotate(0)',
       cornerRadius:        5,
       radius:              20,
-      offset:              15,
+      offset:              20,
       fill:                '#ecf0f1',
       arrowClassName:      `${baseClassName}-arrow`,
       containerClassName:      `${baseClassName}-container`,
