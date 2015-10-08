@@ -230,7 +230,7 @@ module.exports = React.createClass({
               <g
                 className={arrowClassName}>
                 <path
-                  transform={`translate(${margins.left},${arrowOffset}) scale(${arrowScale}, -${arrowScale})`}
+                  transform={`translate(${margins.left},${22}) scale(${arrowScale}, -${arrowScale})`}
                   d={leftPath}/>
                 <rect
                   onClick={this.onClickLeft}
@@ -245,7 +245,7 @@ module.exports = React.createClass({
                 className={arrowClassName}
                 transform={`translate(${width - margins.right - 10},${arrowOffset})`}>
                 <path
-                  transform={`scale(${arrowScale}, -${arrowScale})`}
+                  transform={`translate(${0},${-15}) scale(${arrowScale}, -${arrowScale})`}
                   d={rightPath}/>
                 <rect
                   onClick={this.onClickRight}

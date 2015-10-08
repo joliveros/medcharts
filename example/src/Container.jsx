@@ -7,7 +7,7 @@ const data = require('./data');
 const margins = {
   top: 10
   , right: 20
-  , bottom: 60
+  , bottom: 75
   , left: 45
 };
 
