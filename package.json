@@ -1,11 +1,10 @@
 {
   "name": "medcharts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Medical charts based on react-d3",
   "author": "José Oliveros",
   "homepage": "",
-  "keywords": [
-  ],
+  "keywords": [],
   "license": "MIT",
   "main": "./dist/js/index.js",
   "engines": {
