@@ -1,0 +1,2 @@
+
+exports.MaxMinScatterChart = require('./MaxMinScatterChart');

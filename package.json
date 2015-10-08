@@ -1,0 +1,107 @@
+{
+  "name": "medcharts",
+  "version": "0.1.0",
+  "description": "Medical charts based on react-d3",
+  "author": "José Oliveros",
+  "homepage": "",
+  "keywords": [
+  ],
+  "license": "MIT",
+  "main": "./dist/js/index.js",
+  "engines": {
+    "node": "4.x"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.25",
+    "babel-plugin-react-transform": "^1.1.1",
+    "babelify": "^6.3.0",
+    "browser-sync": "^2.9.7",
+    "browserify": "~11.2.0",
+    "chai": "^3.3.0",
+    "chalk": "^1.1.1",
+    "convert-hex": "^0.1.0",
+    "del": "^2.0.2",
+    "envify": "^3.4.0",
+    "express": "^4.13.3",
+    "fs-extra": "^0.24.0",
+    "glob": "^5.0.15",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-debug": "^2.1.0",
+    "gulp-filter": "^3.0.1",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-nodemon": "^2.0.4",
+    "gulp-react": "^3.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.4.1",
+    "gulp-util": "^3.0.6",
+    "jsdom": "^6.5.1",
+    "jshint-stylish": "^2.0.1",
+    "karma": "^0.13.10",
+    "karma-browserify": "^4.4.0",
+    "karma-chai": "^0.1.0",
+    "karma-chai-plugins": "^0.6.0",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-cli": "0.1.1",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "lazypipe": "^1.0.1",
+    "livereactload": "^2.0.1",
+    "merge-stream": "^1.0.0",
+    "mocha": "^2.3.3",
+    "react-proxy": "^1.1.1",
+    "react-tools": "^0.13.3",
+    "reactify": "^1.1.1",
+    "uglify-js": "^2.4.24",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "dependencies": {
+    "convert-hex": "^0.1.0",
+    "d3": "^3.5.6",
+    "debug": "^2.2.0",
+    "es6-react-mixins": "^0.1.8",
+    "fs-promise": "^0.3.1",
+    "handlebars": "^4.0.3",
+    "highlight.js": "^8.8.0",
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6",
+    "ms": "^0.7.1",
+    "react": "^0.14.0",
+    "react-mixin": "^3.0.0",
+    "react-tween-state": "^0.1.3",
+    "underscore.string": "^3.2.2"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "env": "env",
+    "test": "node_modules/.bin/mocha --full-trace --compilers js:babel/register --recursive tests/setup.js ./tests",
+    "watch": "DEBUG=react-d3* node_modules/.bin/mocha -w --compilers js:babel/register --watch-extensions js,jsx --recursive tests/setup.js ./tests/*",
+    "build": "rm -rf dist/js/* && mkdir -p dist/js && node_modules/.bin/babel --stage 2 src --out-dir dist/js",
+    "minified": "gulp release && NODE_ENV=production browserify -t [ reactify --es6 ] --standalone rd3 ./build/cjs/index.js | uglifyjs -c > dist/public/js/react-d3.min.js"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ]
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joliveros/medcharts.git"
+  }
+}
