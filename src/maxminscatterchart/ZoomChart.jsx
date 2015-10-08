@@ -76,13 +76,13 @@ module.exports = React.createClass({
         height: chartHeight
         , width: chartWidth
       }
-    } = this.getChartDimensions();
+    } = this.getChartDimensions(props);
     var {
       xValues
       , yValues
       , xDomain
       , yDomain
-    } = props || this.props;
+    } = props;
     var xScale, yScale;
     pdebug(`${chartWidth} x ${chartHeight}`)
     if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]') {
@@ -194,6 +194,7 @@ module.exports = React.createClass({
     this.setState(this.initZoom(scales))
   },
   componentWillReceiveProps: function(props){
+    pdebug(`#componentWillReceiveProps ${JSON.stringify(_.pick(props, ['width', 'height']))}`)
     this._updateScales(props);
   },
   getChartDimensions: function(props){
