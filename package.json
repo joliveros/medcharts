@@ -84,7 +84,7 @@
     "env": "env",
     "test": "node_modules/.bin/mocha --full-trace --compilers js:babel/register --recursive tests/setup.js ./tests",
     "watch": "DEBUG=react-d3* node_modules/.bin/mocha -w --compilers js:babel/register --watch-extensions js,jsx --recursive tests/setup.js ./tests/*",
-    "build": "rm -rf dist/js/* && mkdir -p dist/js && node_modules/.bin/babel --stage 2 src --out-dir dist/js",
+    "build": "rm -rf dist/js/* && mkdir -p dist/js && NODE_ENV=production node_modules/.bin/babel --stage 2 src --out-dir dist/js",
     "minified": "gulp release && NODE_ENV=production browserify -t [ reactify --es6 ] --standalone rd3 ./build/cjs/index.js | uglifyjs -c > dist/public/js/react-d3.min.js"
   },
   "browserify": {
