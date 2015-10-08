@@ -39,7 +39,7 @@ module.exports = React.createClass({
       textAnchor:          'middle',
       verticalTransform:   'rotate(0)',
       cornerRadius:        5,
-      width:               100,
+      width:               130,
       height:              35,
       offset:              20,
       fill:                '#ecf0f1',

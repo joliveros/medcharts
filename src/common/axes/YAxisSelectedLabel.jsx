@@ -38,7 +38,7 @@ module.exports = React.createClass({
       textAnchor:          'middle',
       verticalTransform:   'rotate(0)',
       cornerRadius:        5,
-      radius:              15,
+      radius:              20,
       offset:              15,
       fill:                '#ecf0f1',
       arrowClassName:      `${baseClassName}-arrow`,
