@@ -2,10 +2,10 @@
 
 var React = require('react');
 var d3 = require('d3');
-var assert = require('chai').assert;
 var pdebug = require('../debug')('MaxMinScatterChart:DataSeries');
-var _ = require('lodash');
-var chartName = 'scatterchart'
+import { pick } from 'lodash';
+const chartName = 'scatterchart';
+
 module.exports = React.createClass({
 
   displayName: 'DataSeries',
@@ -14,11 +14,14 @@ module.exports = React.createClass({
     className:          React.PropTypes.string,
     currentValue:       React.PropTypes.object,
     data:               React.PropTypes.array.isRequired,
+    dataGroupClassName: React.PropTypes.string,
     DataMarker:         React.PropTypes.func.isRequired,
     DataMarkerClick:    React.PropTypes.func,
+    isMobile:           React.PropTypes.bool,
+    xScale:             React.PropTypes.func,
+    yScale:             React.PropTypes.func,
     zooming:            React.PropTypes.bool
   },
-
   getDefaultProps() {
     return {
       className: `rd3-${chartName}-dataseries`
@@ -28,36 +31,48 @@ module.exports = React.createClass({
       , colors: d3.scale.category20c()
     };
   },
-
+  shouldComponentUpdate(props) {
+    // if(props.zooming)return false;
+    let {
+      currentValue: previous
+    } = this.props;
+    let {
+      currentValue
+    } = props;
+    if(currentValue === previous)return false;
+    return true;
+  },
   render: function() {
+    pdebug('#render');
     var {
-      data
-      , dataGroupClassName
-      , DataMarker
-      , DataMarkerClick
-      , currentValue
+      currentValue,
+      data,
+      dataGroupClassName,
+      DataMarker,
+      DataMarkerClick
     } = this.props;
     currentValue = currentValue || {};
-    var props = _.pick(this.props, [
+    var props = pick(this.props, [
       'xScale'
       , 'yScale'
       , 'height'
+      , 'isMobile'
       , 'width'
-      , 'strokeWidth'
       , 'zooming'
     ]);
     return (
-      <g className={dataGroupClassName}>
+      <g
+          className={dataGroupClassName}>
         {
           data.map((value, idx) =>{
             let active = value.coord.x === currentValue.x;
             return (
               <DataMarker
-                {...props}
-                key={idx}
-                value={value}
-                active={active}
-                click={DataMarkerClick}/>
+                  {...props}
+                  active={active}
+                  click={DataMarkerClick}
+                  key={idx}
+                  value={value}/>
             );
           })
         }

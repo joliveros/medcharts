@@ -53,7 +53,7 @@ module.exports = React.createClass({
       },
       leftPath:             "M1171 1235l-531 -531l531 -531q19 -19 19 -45t-19 -45l-166 -166q-19 -19 -45 -19t-45 19l-742 742q-19 19 -19 45t19 45l742 742q19 19 45 19t45 -19l166 -166q19 -19 19 -45t-19 -45z",
       rightPath: "M1107 659l-742 -742q-19 -19 -45 -19t-45 19l-166 166q-19 19 -19 45t19 45l531 531l-531 531q-19 19 -19 45t19 45l166 166q19 19 45 19t45 -19l742 -742q19 -19 19 -45t-19 -45z",
-      animationDuration:  200
+      animationDuration:  300
     };
   }
   , getInitialState(){
@@ -150,7 +150,7 @@ module.exports = React.createClass({
       animationDuration
     } = this.props;
     await ctx.animateState('position', {
-      easing: tweenState.easingTypes.easeOutElastic
+      easing: tweenState.easingTypes.easeOutQuart
       , duration: animationDuration + 200
       , beginValue: previous
       , endValue: newPosition

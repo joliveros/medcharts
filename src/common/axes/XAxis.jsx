@@ -2,7 +2,6 @@
 
 var React = require('react');
 var d3 = require('d3');
-var _ = require('lodash');
 var AxisTicks = require('./AxisTicks');
 var AxisLine = require('./AxisLine');
 var Label = require('./Label');
@@ -13,26 +12,28 @@ module.exports = React.createClass({
 
   displayName: 'XAxis',
   propTypes: {
-    value:           React.PropTypes.object,
-    currentValueChange: React.PropTypes.func,
-    fill:            React.PropTypes.string,
-    height:          React.PropTypes.number.isRequired,
-    width:           React.PropTypes.number.isRequired,
-    stroke:          React.PropTypes.string,
-    strokeWidth:     React.PropTypes.string,
-    tickStroke:      React.PropTypes.string,
-    xAxisClassName:  React.PropTypes.string,
-    xAxisLabel:      React.PropTypes.string,
-    xAxisTickValues: React.PropTypes.array,
-    xAxisOffset:     React.PropTypes.number,
-    xScale:          React.PropTypes.func.isRequired,
-    yScale:          React.PropTypes.func.isRequired,
-    xOrient:         React.PropTypes.oneOf(['top', 'bottom']),
-    yOrient:         React.PropTypes.oneOf(['left', 'right']),
-    gridVertical:  React.PropTypes.bool,
-    gridVerticalStroke: React.PropTypes.string,
-    gridVerticalStrokeWidth: React.PropTypes.number,
-    gridVerticalStrokeDash: React.PropTypes.string
+    currentValueChange:       React.PropTypes.func,
+    fill:                     React.PropTypes.string,
+    gridVertical:             React.PropTypes.bool,
+    gridVerticalStroke:       React.PropTypes.string,
+    gridVerticalStrokeDash:   React.PropTypes.string,
+    gridVerticalStrokeWidth:  React.PropTypes.number,
+    height:                   React.PropTypes.number.isRequired,
+    isMobile:                 React.PropTypes.bool,
+    stroke:                   React.PropTypes.string,
+    strokeWidth:              React.PropTypes.string,
+    tickStroke:               React.PropTypes.string,
+    value:                    React.PropTypes.object,
+    width:                    React.PropTypes.number.isRequired,
+    xAxisClassName:           React.PropTypes.string,
+    xAxisLabel:               React.PropTypes.string,
+    xAxisOffset:              React.PropTypes.number,
+    xAxisTickValues:          React.PropTypes.array,
+    xOrient:                  React.PropTypes.oneOf(['top', 'bottom']),
+    xScale:                   React.PropTypes.func.isRequired,
+    yOrient:                  React.PropTypes.oneOf(['left', 'right']),
+    yScale:                   React.PropTypes.func.isRequired,
+    zooming:                  React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -46,21 +47,20 @@ module.exports = React.createClass({
       xAxisLabelOffset: 0,
       xAxisOffset:      0,
       xOrient:         'bottom',
-      yOrient:         'left'
+      yOrient:         'left',
+      zooming:         false
     };
   },
-  initAxis: function(){
-    return d3.svg.axis()
-    .orient(this.props.xOrient)
-    .scale(this.props.xScale)
-    .tickPadding(6)
+  shouldComponentUpdate(props) {
+    if(props.zooming)return false;
+    return true;
   },
   render() {
-    pdebug(this.props.xScale.id)
+    pdebug('#render');
     var props = this.props;
     let {
-      value
-      , xScale
+      isMobile
+      , value
       , yScale
     } = this.props;
     value = value || {};
@@ -71,9 +71,8 @@ module.exports = React.createClass({
       , y
     } = value;
     let markerHeight = yScale(y);
-    var t = `translate(0 ,${props.xAxisOffset +
+    var translate = `translate(0 ,${props.xAxisOffset +
     props.height})`;
-    pdebug('XAxis', t)
     var tickArguments;
     if (typeof props.xAxisTickCount !== 'undefined') {
       tickArguments = [props.xAxisTickCount];
@@ -83,53 +82,50 @@ module.exports = React.createClass({
     }
     return (
       <g
-        className={props.xAxisClassName}
-        ref='axis'
-        transform={t}
-      >
-        <AxisTicks
-          tickValues={props.xAxisTickValues}
-          tickFormatting={props.tickFormatting}
-          tickArguments={tickArguments}
-          tickStroke={props.tickStroke}
-          tickTextStroke={props.tickTextStroke}
-          innerTickSize={props.tickSize}
-          scale={props.xScale}
-          orient={props.xOrient}
-          orient2nd={props.yOrient}
-          height={props.height}
-          width={props.width}
-          gridVertical={props.gridVertical}
-          gridVerticalStroke={props.gridVerticalStroke}
-          gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
-          gridVerticalStrokeDash={props.gridVerticalStrokeDash}
-        />
+          className={props.xAxisClassName}
+          ref='axis'
+          transform={translate}>
+          <AxisTicks
+              gridVertical={props.gridVertical}
+              gridVerticalStroke={props.gridVerticalStroke}
+              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+              height={props.height}
+              innerTickSize={props.tickSize}
+              orient={props.xOrient}
+              orient2nd={props.yOrient}
+              scale={props.xScale}
+              tickArguments={tickArguments}
+              tickFormatting={props.tickFormatting}
+              tickStroke={props.tickStroke}
+              tickTextStroke={props.tickTextStroke}
+              tickValues={props.xAxisTickValues}
+              width={props.width}
+          />
         <AxisLine
-          scale={props.xScale}
-          stroke={props.stroke}
-          orient={props.xOrient}
-          outerTickSize={props.tickSize}
-          {...props}
-        />
+            {...props}
+            orient={props.xOrient}
+            outerTickSize={props.tickSize}
+            scale={props.xScale}
+            stroke={props.stroke}/>
         {x?
           <XAxisSelectedLabel
-            value={x}
-            isLast={isLast}
-            isFirst={isFirst}
-            scale={props.xScale}
-            orient={props.xOrient}
-            currentValueChange={props.currentValueChange}
-            maxPosition={props.width}
-            markerHeight={markerHeight}
+              currentValueChange={props.currentValueChange}
+              isFirst={isFirst}
+              isLast={isLast}
+              markerHeight={markerHeight}
+              maxPosition={props.width}
+              orient={props.xOrient}
+              scale={props.xScale}
+              value={x}
             />:null
         }
         <Label
-          label={props.xAxisLabel}
-          offset={props.xAxisLabelOffset}
-          orient={props.xOrient}
-          margins={props.margins}
-          width={props.width}
-          />
+            label={props.xAxisLabel}
+            margins={props.margins}
+            offset={props.xAxisLabelOffset}
+            orient={props.xOrient}
+            width={props.width}/>
       </g>
     );
   }

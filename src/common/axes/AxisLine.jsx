@@ -39,14 +39,22 @@ module.exports = React.createClass({
   _d3_scaleRange(scale) {
     return scale.rangeExtent ? scale.rangeExtent() : this._d3_scaleExtent(scale.range());
   },
-
+  shouldComponentUpdate(props){
+    let {
+      scale: {
+        id
+      }
+    } = props;
+    if(id === this.scaleId) return false;
+    return true;
+  },
   render() {
-
+    pdebug('#render');
     var props = this.props;
     var sign = props.orient === "top" || props.orient === "left" ? -1 : 1;
     // pdebug(props.scale.id)
+    this.scaleId = props.scale.id;
     var range = this._d3_scaleRange(props.scale);
-    pdebug(range)
     var d;
 
     if (props.orient === "bottom" || props.orient === "top") {
@@ -54,7 +62,6 @@ module.exports = React.createClass({
     } else {
       d = "M" + sign * props.outerTickSize + "," + range[0] + "H0V" + range[1] + "H" + sign * props.outerTickSize;
     }
-    pdebug(d)
 
     return (
       <path

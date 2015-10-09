@@ -14,24 +14,27 @@ module.exports = React.createClass({
   displayName: 'YAxis',
 
   propTypes: {
-    fill:            React.PropTypes.string,
-    value:           React.PropTypes.object,
-    stroke:          React.PropTypes.string,
-    strokeWidth:     React.PropTypes.string,
-    tickStroke:      React.PropTypes.string,
-    width:           React.PropTypes.number.isRequired,
-    height:          React.PropTypes.number.isRequired,
-    yAxisClassName:  React.PropTypes.string,
-    yAxisLabel:      React.PropTypes.string,
-    yAxisOffset:     React.PropTypes.number,
-    yAxisTickValues: React.PropTypes.array,
-    xOrient:         React.PropTypes.oneOf(['top', 'bottom']),
-    yOrient:         React.PropTypes.oneOf(['left', 'right']),
-    yScale:          React.PropTypes.func.isRequired,
-    gridVertical: React.PropTypes.bool,
-    gridVerticalStroke: React.PropTypes.string,
-    gridVerticalStrokeWidth: React.PropTypes.number,
-    gridVerticalStrokeDash: React.PropTypes.string
+    fill:                     React.PropTypes.string,
+    gridVertical:             React.PropTypes.bool,
+    gridVerticalStroke:       React.PropTypes.string,
+    gridVerticalStrokeDash:   React.PropTypes.string,
+    gridVerticalStrokeWidth:  React.PropTypes.number,
+    height:                   React.PropTypes.number.isRequired,
+    isMobile:                 React.PropTypes.bool,
+    stroke:                   React.PropTypes.string,
+    strokeWidth:              React.PropTypes.string,
+    tickStroke:               React.PropTypes.string,
+    value:                    React.PropTypes.object,
+    width:                    React.PropTypes.number.isRequired,
+    xOrient:                  React.PropTypes.oneOf(['top', 'bottom']),
+    xScale:                   React.PropTypes.func.isRequired,
+    yAxisClassName:           React.PropTypes.string,
+    yAxisLabel:               React.PropTypes.string,
+    yAxisOffset:              React.PropTypes.number,
+    yAxisTickValues:          React.PropTypes.array,
+    yOrient:                  React.PropTypes.oneOf(['left', 'right']),
+    yScale:                   React.PropTypes.func.isRequired,
+    zooming:                  React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -44,21 +47,20 @@ module.exports = React.createClass({
       yAxisLabel:     '',
       yAxisOffset:    0,
       xOrient:        'bottom',
-      yOrient:        'left'
+      yOrient:        'left',
+      zooming:        false
     };
   },
 
   render() {
-    pdebug('#render')
+    pdebug('#render');
     var props = this.props;
-    pdebug(props.height)
-    pdebug(props.yScale.range())
     let {
-      value
+      isMobile
+      , value
       , xScale
     } = this.props;
     value = value || {};
-    pdebug(`#render ${JSON.stringify(value)}`);
     let {
       x
       , y
@@ -82,51 +84,47 @@ module.exports = React.createClass({
 
     return (
       <g
-        className={props.yAxisClassName}
-        transform={t}
-      >
-        <AxisTicks
-          innerTickSize={props.tickSize}
-          orient={props.yOrient}
-          orient2nd={props.xOrient}
-          tickArguments={tickArguments}
-          tickFormatting={props.tickFormatting}
-          tickStroke={props.tickStroke}
-          tickTextStroke={props.tickTextStroke}
-          tickValues={props.yAxisTickValues}
-          scale={props.yScale}
-          height={props.height}
-          width={props.width}
-          gridHorizontal={props.gridHorizontal}
-          gridHorizontalStroke={props.gridHorizontalStroke}
-          gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
-          gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
-        />
+          className={props.yAxisClassName}
+          transform={t}>
+          <AxisTicks
+              gridHorizontal={props.gridHorizontal}
+              gridHorizontalStroke={props.gridHorizontalStroke}
+              gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+              height={props.height}
+              innerTickSize={props.tickSize}
+              orient={props.yOrient}
+              orient2nd={props.xOrient}
+              scale={props.yScale}
+              tickArguments={tickArguments}
+              tickFormatting={props.tickFormatting}
+              tickStroke={props.tickStroke}
+              tickTextStroke={props.tickTextStroke}
+              tickValues={props.yAxisTickValues}
+              width={props.width}
+          />
         <AxisLine
-          orient={props.yOrient}
-          outerTickSize={props.tickSize}
-          scale={props.yScale}
-          stroke={props.stroke}
-          {...props}
+            {...props}
+            orient={props.yOrient}
+            outerTickSize={props.tickSize}
+            scale={props.yScale}
+            stroke={props.stroke}
         />
       {y?
           <YAxisSelectedLabel
-            value={y}
-            scale={props.yScale}
-            orient={props.yOrient}
-            maxPosition={props.height}
-            markerHeight={markerHeight}
-            />:null
+              markerHeight={markerHeight}
+              maxPosition={props.height}
+              orient={props.yOrient}
+              scale={props.yScale}
+              value={y}/>:null
         }
         <Label
-          height={props.height}
-          label={props.yAxisLabel}
-          margins={props.margins}
-          offset={props.yAxisLabelOffset}
-          orient={props.yOrient}
-        />
+            height={props.height}
+            label={props.yAxisLabel}
+            margins={props.margins}
+            offset={props.yAxisLabelOffset}
+            orient={props.yOrient}/>
       </g>
     );
   }
-
 });

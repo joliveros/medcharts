@@ -1,39 +1,39 @@
 'use strict';
 
 var React = require('react');
-var d3 = require('d3');
 var Chart = require('./ZoomChart');
-var DataMarker = require('./Result')
+var DataMarker = require('./Result');
 var utils = require('../utils');
 var _ = require('lodash');
 var ms = require('ms');
 var { TimeValueChartPropsMixin } = require('../mixins');
-var pdebug = require('../debug')('MaxMinScatterChart')
-var YEAR_MS = ms('365d')
+var pdebug = require('../debug')('MaxMinScatterChart');
+var YEAR_MS = ms('365d');
+import d3 from 'd3';
 
 module.exports = React.createClass({
-  mixins: [
-    TimeValueChartPropsMixin
-   ],
   displayName: 'MaxMinScatterChart',
   propTypes: {
-    strokeWidth:            React.PropTypes.number,
     className:              React.PropTypes.string,
     data:                   React.PropTypes.array.isRequired,
     height:                 React.PropTypes.number,
+    isMobile:               React.PropTypes.bool,
+    strokeWidth:            React.PropTypes.number,
     width:                  React.PropTypes.number,
-    xAxisUnit:              React.PropTypes.string,
     xAxisClassName:         React.PropTypes.string,
     xAxisStrokeWidth:       React.PropTypes.number,
+    xAxisUnit:              React.PropTypes.string,
     yAxisClassName:         React.PropTypes.string,
     yAxisStrokeWidth:       React.PropTypes.number
- },
+  },
+  mixins: [
+    TimeValueChartPropsMixin
+  ],
   getDefaultProps() {
     return {
     };
   },
   getYValues: function(){
-    var ctx = this;
     var yValues = [];
     this.props.data.forEach((series) => {
       series.values.forEach((value) => {
@@ -64,7 +64,7 @@ module.exports = React.createClass({
     xDomain.lowerBound = xExtent.lowerBound;
 
     if(_.isDate(xExtent.upperBound))
-    xDomain.upperBound = new Date(xExtent.upperBound.getTime() + extraTime)
+    xDomain.upperBound = new Date(xExtent.upperBound.getTime() + extraTime);
     else
     xDomain.upperBound = xExtent.upperBound;
     return xDomain;
@@ -139,7 +139,7 @@ module.exports = React.createClass({
   /* Returns an array of reference ranges */
   getRefRanges: function(values) {
     return _.map(values, function(value) {
-      return _.pick(value.d, ['value','lcl', 'ucl'])
+      return _.pick(value.d, ['value','lcl', 'ucl']);
     });
   },
   flattenData: function(){
@@ -148,33 +148,108 @@ module.exports = React.createClass({
       , yAccessor
       , xAccessor
     } = this.props;
-    return utils.flattenData(data, xAccessor, yAccessor)
+    return utils.flattenData(data, xAccessor, yAccessor);
+  },
+  getChartDimensions: function(props){
+    pdebug('#getChartDimensions');
+    // Calculate inner chart dimensions
+    var { height
+      , width
+      , margins
+    } = props || this.props;
+    pdebug(`#getChartDimensions ${width} x ${height}`);
+    var dims = {
+      inner:{
+        width: width - margins.left - margins.right
+        , height: height - margins.top - margins.bottom
+      }
+    };
+    pdebug('#getChartDimensions %s', JSON.stringify(dims));
+    return dims;
+  },
+  calculateScales: function(opts) {
+    pdebug('#calculateScales');
+    opts = opts || {};
+    var {
+      xValues
+      , yValues
+      , xDomain
+      , yDomain
+      , dimensions: {
+        height: chartHeight
+        , width: chartWidth
+      }
+    } = opts;
+    var xScale, yScale;
+    pdebug(`${chartWidth} x ${chartHeight}`);
+    if (xValues.length > 0 && Object.prototype.toString.call(xValues[0]) === '[object Date]') {
+      xScale = d3.time.scale()
+        .range([0, chartWidth]);
+    } else {
+      xScale = d3.scale.linear()
+        .range([0, chartWidth]);
+    }
+    xScale.domain([xDomain.lowerBound, xDomain.upperBound]);
+    if (yValues.length > 0 && Object.prototype.toString.call(yValues[0]) === '[object Date]') {
+      yScale = d3.time.scale()
+        .range([chartHeight, 0]);
+    } else {
+      yScale = d3.scale.linear()
+        .range([chartHeight, 0]);
+    }
+    yScale.domain([yDomain.lowerBound, yDomain.upperBound]);
+    xScale.id = _.uniqueId('scale_');
+    yScale.id = _.uniqueId('scale_');
+    pdebug(`#calculateScales yScale range: ${yScale.range()}`);
+    return {
+      xScale: xScale,
+      yScale: yScale
+    };
   },
   render() {
-    pdebug('#render')
-    var ctx = this;
+    pdebug('#render');
     var props = _.omit(this.props, ['data']);
     var {
       allValues
       , xValues
       , yValues
     } = this.flattenData();
+    let innerDimensions = this.getChartDimensions().inner;
     var xDomain = this.calculateInitialxDomain(xValues);
     var yDomain = this.calculateInitialyDomain(allValues);
+    let scaleOpts = {
+      xValues: xValues
+      , yValues: yValues
+      , xDomain: xDomain
+      , yDomain: yDomain
+      , dimensions: innerDimensions
+    };
+    let {
+      xScale: xChartScale
+      , yScale: yChartScale
+    } = this.calculateScales(scaleOpts);
+    let {
+      xScale
+      , yScale
+    } = this.calculateScales(scaleOpts);
     if (!allValues || allValues.length < 1) {
       return null;
     }
     return (
       <Chart
-        {...props}
-        data={allValues}
-        xValues={xValues}
-        yValues={yValues}
-        yDomain={yDomain}
-        xDomain={xDomain}
-        dataMarker={DataMarker}
-        ref="chart"
-        />
+          {...props}
+          data={allValues}
+          dataMarker={DataMarker}
+          innerDimensions={innerDimensions}
+          ref="chart"
+          xChartScale={xChartScale}
+          xDomain={xDomain}
+          xScale={xScale}
+          xValues={xValues}
+          yChartScale={yChartScale}
+          yDomain={yDomain}
+          yScale={yScale}
+          yValues={yValues}/>
     );
   }
 

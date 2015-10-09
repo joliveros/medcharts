@@ -1,7 +1,8 @@
 var port = 4000;
 var express = require("express"),
-app = express()
-
+argv = require('yargs').argv,
+app = express();
+port = argv.port || port;
 app.get("/", function (req, res) {
   res.send("<!DOCTYPE html>" +
   "<html>" +

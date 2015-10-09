@@ -1,5 +1,5 @@
-var gulp      = require('gulp'),
-gdebug      = require('gulp-debug'),
+var gulp = require('gulp'),
+gdebug = require('gulp-debug'),
 debug       = require('debug')('gulp'),
 gutil       = require("gulp-util"),
 nodemon     = require("gulp-nodemon"),
@@ -12,7 +12,7 @@ envify      = require("envify"),
 lrload      = require("livereactload"),
 baseDir     = "./example"
 
-var isProd = process.env.NODE_ENV === "production"
+var isProd = process.env.NODE_ENV === "production";
 
 var bundler = browserify({
   entries:      [ `${baseDir}/src/index.jsx` ],
