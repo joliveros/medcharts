@@ -18,10 +18,10 @@ module.exports = React.createClass({
       click:                React.PropTypes.func,
       colors:               React.PropTypes.array,
       fullOpacity:          React.PropTypes.number,
+      index:                  React.PropTypes.number,
       isMobile:             React.PropTypes.bool,
       markerFill:           React.PropTypes.string,
       markerSize:           React.PropTypes.number,
-      key:                  React.PropTypes.number,
       markerSize:         React.PropTypes.number,
       markerSizeOnHover:  React.PropTypes.number,
       mouseEventAreaWidth:  React.PropTypes.number,
@@ -40,6 +40,7 @@ module.exports = React.createClass({
       markerFill: "white",
       markerSize: 8,
       markerSizeOnHover: 12,
+      strokeWidth: 2,
       fullOpacity: 1,
       isMobile: false,
       mouseEventAreaWidth: 20,
@@ -54,10 +55,6 @@ module.exports = React.createClass({
     return {
       circleRadius: circleRadius
     };
-  },
-  shouldComponentUpdate(props) {
-    if(props.zooming)return false;
-    return true;
   },
   initColorScale: function(){
     let {
@@ -125,6 +122,7 @@ module.exports = React.createClass({
     });
   }
   , onClick: function(){
+    pdebug(`onClick`);
     let {
       click
       , value: {
@@ -148,7 +146,8 @@ module.exports = React.createClass({
     click(coord);
   },
   render: function() {
-    // pdebug('#render');
+    pdebug('#render');
+    pdebug(this.props.key);
     let {
       value: {
         coord: {
@@ -159,18 +158,18 @@ module.exports = React.createClass({
           ucl: _ucl
           , lcl: _lcl
         }
-      }
-      , yScale
-      , xScale
-      , className
-      , key
-      , markerFill: circleFill
-      , opacity
-      , mouseEventAreaWidth
-      , active
-      , fullOpacity
+      },
+      strokeWidth,
+      yScale,
+      xScale,
+      className,
+      index,
+      markerFill: circleFill,
+      opacity,
+      mouseEventAreaWidth,
+      active,
+      fullOpacity
     } = this.props;
-
     let circleRadius = this.getTweeningValue('circleRadius');
     opacity = this.getTweeningValue('opacity') || opacity;
     if(active){
@@ -196,31 +195,37 @@ module.exports = React.createClass({
     return (
       <g
           className={className}
-          key={key}
+          key={index}
           opacity={opacity}>
         <Line
             {...lineProps}
             className="normal"
             stroke={normalColor}
+            strokeWidth={strokeWidth}
             y1={ucl}
             y2={lcl}/>
         <Line
             {...lineProps}
             className="abnormal"
             stroke={abnormalColor}
+            strokeWidth={strokeWidth}
             y1={UpperDangerValue}
             y2={ucl}/>
         <Line
             {...lineProps}
             className="abnormal"
             stroke={abnormalColor}
+            strokeWidth={strokeWidth}
             y1={LowerDangerValue}
             y2={lcl}/>
         <Circle
             circleFill={circleFill}
+            circleRadius={circleRadius}
             cx={cx}
             cy={cy}
-            stroke={normalColor}/>
+            stroke={normalColor}
+            strokeWidth={strokeWidth}
+            />
         <rect
             fill="transparent"
             height={rectHeight}

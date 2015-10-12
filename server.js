@@ -7,7 +7,7 @@ app.get("/", function (req, res) {
   res.send("<!DOCTYPE html>" +
   "<html>" +
     "<head>" +
-      "<title>react-d3</title>" +
+      "<title>medcharts</title>" +
     "</head>" +
     "<body>" +
       "<div id='app'></div>" +

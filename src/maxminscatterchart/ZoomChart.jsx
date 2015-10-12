@@ -20,7 +20,6 @@ module.exports = React.createClass({
   propTypes: {
     data:                   React.PropTypes.array.isRequired,
     dataMarker:             React.PropTypes.func,
-    dataMarkerSize:         React.PropTypes.number,
     height:                 React.PropTypes.number.isRequired,
     isMobile:               React.PropTypes.bool,
     margins:                React.PropTypes.object,
@@ -29,12 +28,10 @@ module.exports = React.createClass({
     xAxisClassName:         React.PropTypes.string,
     xAxisStrokeWidth:       React.PropTypes.number,
     xAxisUnit:              React.PropTypes.string,
-    xChartScale:            React.PropTypes.func,
     xScale:                 React.PropTypes.func.isRequired,
     yAxisClassName:         React.PropTypes.string,
     yAxisOffset:            React.PropTypes.number,
     yAxisStrokeWidth:       React.PropTypes.number,
-    yChartScale:            React.PropTypes.func,
     yScale:                 React.PropTypes.func.isRequired
  },
 
@@ -61,15 +58,9 @@ module.exports = React.createClass({
     };
   },
   getInitialState(){
-    let {
-      dataMarkerSize
-    } = this.props;
-    let circleRadius = dataMarkerSize/2;
-    pdebug(`initial radius: ${circleRadius}`);
     return {
       currentValue: null
       , zooming: false
-      , circleRadius: circleRadius
     };
   },
   componentDidMount(){
@@ -83,36 +74,9 @@ module.exports = React.createClass({
     var x = this.props.yAxisOffset < 0 ? (this.props.margins.left + Math.abs(this.props.yAxisOffset)) : this.props.margins.left;
     return `translate(${x}, ${this.props.margins.top})`;
   },
-  setZoomingState(){
-    let ctx = this;
-    if(this.state.zooming)return;
-    this.setState({zooming: true});
-    // if(this._zoomStateTimer){
-    //   // clearTimeout(this._zoomStateTimer);
-    //   pdebug('#clearTimeout');
-    //   // delete this._zoomStateTimer;
-    // }
-    this._zoomStateTimer = setTimeout(function(){
-      pdebug('not zooming');
-      delete ctx._zoomStateTimer;
-      ctx.setState({zooming: false});
-    }, 100);
-  },
   zoomed: function(){
-    let {
-      dataMarkerSize
-    } = this.props;
-    let {
-      scale
-      , translate
-    } = d3.event;
-    // this.setZoomingState();
     this.setState({
-      strokeWidth: this.props.strokeWidth/scale
-      , transform: `translate(${translate}) scale(${scale})`
-      , transformCircle: `scale(${1/scale})`
-      , circleRadius: dataMarkerSize/2/scale
-      , scale: scale
+      strokeWidth: this.props.strokeWidth
     });
   },
   /**
@@ -203,10 +167,8 @@ module.exports = React.createClass({
       , margins
       , strokeWidth
       , width
-      , xChartScale
-      , yChartScale
-      , xScale
       , yScale
+      , xScale
     } = props;
     var transform = this.chartOffSet();
     var {
@@ -215,11 +177,7 @@ module.exports = React.createClass({
     } = innerDimensions;
     var {
       currentValue
-      , transformCircle
-      , strokeWidth: adjustedStrokeWidth
-      , transform: zoom
       , zooming
-      , circleRadius
     } = this.state;
     pdebug(`#render zooming: ${zooming}`);
     if (!data || data.length < 1) {
@@ -242,13 +200,6 @@ module.exports = React.createClass({
             {`
               .rd3-max-min-scatter-chart{
                 -webkit-tap-highlight-color: rgba(0,0,0,0);
-              }
-              .rd3-scatterchart-datagroup line {
-                stroke-width: ${adjustedStrokeWidth || strokeWidth} !important;
-              }
-              .rd3-scatterchart-voronoi-circle {
-                r: ${circleRadius};
-                stroke-width: ${adjustedStrokeWidth || strokeWidth};
               }
             `}
           </style>
@@ -328,20 +279,19 @@ module.exports = React.createClass({
               fill="transparent"
               height={innerHeight}
               width={innerWidth}/>
-          <g transform={zoom}>
-              <DataSeries
-                  currentValue={currentValue}
-                  data={data}
-                  DataMarker={dataMarker}
-                  DataMarkerClick={this.DataMarkerClick}
-                  height={innerHeight}
-                  isMobile={isMobile}
-                  strokeWidth={strokeWidth}
-                  width={innerWidth}
-                  xScale={xChartScale}
-                  yScale={yChartScale}
-                  zooming={zooming}/>
-          </g>
+          <DataSeries
+              currentValue={currentValue}
+              data={data}
+              DataMarker={dataMarker}
+              DataMarkerClick={this.DataMarkerClick}
+              height={innerHeight}
+              isMobile={isMobile}
+              strokeWidth={strokeWidth}
+              width={innerWidth}
+              xScale={xScale}
+              yScale={yScale}
+              zooming={zooming}
+              />
         </g>
         </g>
       </Chart>

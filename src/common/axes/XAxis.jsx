@@ -62,6 +62,7 @@ module.exports = React.createClass({
       isMobile
       , value
       , yScale
+      , zooming
     } = this.props;
     value = value || {};
     let {
@@ -113,11 +114,13 @@ module.exports = React.createClass({
               currentValueChange={props.currentValueChange}
               isFirst={isFirst}
               isLast={isLast}
+              isMobile={isMobile}
               markerHeight={markerHeight}
               maxPosition={props.width}
               orient={props.xOrient}
               scale={props.xScale}
               value={x}
+              zooming={zooming}
             />:null
         }
         <Label

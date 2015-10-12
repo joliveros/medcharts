@@ -31,17 +31,6 @@ module.exports = React.createClass({
       , colors: d3.scale.category20c()
     };
   },
-  shouldComponentUpdate(props) {
-    // if(props.zooming)return false;
-    let {
-      currentValue: previous
-    } = this.props;
-    let {
-      currentValue
-    } = props;
-    if(currentValue === previous)return false;
-    return true;
-  },
   render: function() {
     pdebug('#render');
     var {
@@ -57,6 +46,7 @@ module.exports = React.createClass({
       , 'yScale'
       , 'height'
       , 'isMobile'
+      , 'strokeWidth'
       , 'width'
       , 'zooming'
     ]);
@@ -71,6 +61,7 @@ module.exports = React.createClass({
                   {...props}
                   active={active}
                   click={DataMarkerClick}
+                  index={idx}
                   key={idx}
                   value={value}/>
             );

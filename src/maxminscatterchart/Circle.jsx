@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var d3 = require('d3');
 
 module.exports = React.createClass({
 
@@ -27,13 +26,13 @@ module.exports = React.createClass({
 
     return (
       <circle
-        cx={props.cx}
-        cy={props.cy}
-        strokeWidth={props.strokeWidth}
-        stroke={props.stroke}
-        className={props.className}
-        fill={props.circleFill}
-        r={props.circleRadius}
+          className={props.className}
+          cx={props.cx}
+          cy={props.cy}
+          fill={props.circleFill}
+          r={props.circleRadius}
+          stroke={props.stroke}
+          strokeWidth={props.strokeWidth}
       />
 
     );

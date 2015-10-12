@@ -209,6 +209,7 @@ module.exports = React.createClass({
   render() {
     pdebug('#render');
     var props = _.omit(this.props, ['data']);
+    let isMobile = this.props.height<=300;
     var {
       allValues
       , xValues
@@ -225,10 +226,6 @@ module.exports = React.createClass({
       , dimensions: innerDimensions
     };
     let {
-      xScale: xChartScale
-      , yScale: yChartScale
-    } = this.calculateScales(scaleOpts);
-    let {
       xScale
       , yScale
     } = this.calculateScales(scaleOpts);
@@ -241,15 +238,15 @@ module.exports = React.createClass({
           data={allValues}
           dataMarker={DataMarker}
           innerDimensions={innerDimensions}
+          isMobile={isMobile}
           ref="chart"
-          xChartScale={xChartScale}
           xDomain={xDomain}
           xScale={xScale}
           xValues={xValues}
-          yChartScale={yChartScale}
           yDomain={yDomain}
           yScale={yScale}
-          yValues={yValues}/>
+          yValues={yValues}
+          />
     );
   }
 

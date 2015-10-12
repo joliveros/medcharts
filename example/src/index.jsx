@@ -25,19 +25,9 @@ React.render(
       <Chart
           data={data}
           height={400}
-          isMobile={false}
           margins={margins}
           strokeWidth={3}
-          width={800}/>
-    {/*
-      <Chart
-          data={data}
-          height={400}
-          isMobile={true}
-          margins={margins}
-          strokeWidth={3}
-          width={900}/>
-    */}
+          width={700}/>
   </div>
   , document.getElementById('app')
 );
