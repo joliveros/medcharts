@@ -1,6 +1,6 @@
 {
   "name": "medcharts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Medical charts based on react-d3",
   "author": "José Oliveros",
   "homepage": "",
