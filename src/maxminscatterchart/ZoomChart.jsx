@@ -30,6 +30,7 @@ module.exports = React.createClass({
     xAxisUnit:              React.PropTypes.string,
     xScale:                 React.PropTypes.func.isRequired,
     yAxisClassName:         React.PropTypes.string,
+    yAxisLabel:             React.PropTypes.string,
     yAxisOffset:            React.PropTypes.number,
     yAxisStrokeWidth:       React.PropTypes.number,
     yScale:                 React.PropTypes.func.isRequired

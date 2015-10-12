@@ -15,6 +15,7 @@ module.exports = React.createClass({
   displayName: 'MaxMinScatterChart',
   propTypes: {
     className:              React.PropTypes.string,
+    currentIndex:           React.PropTypes.number,
     data:                   React.PropTypes.array.isRequired,
     height:                 React.PropTypes.number,
     isMobile:               React.PropTypes.bool,
@@ -31,6 +32,7 @@ module.exports = React.createClass({
   ],
   getDefaultProps() {
     return {
+      currentIndex: 0
     };
   },
   getYValues: function(){
@@ -209,7 +211,7 @@ module.exports = React.createClass({
   render() {
     pdebug('#render');
     var props = _.omit(this.props, ['data']);
-    let isMobile = this.props.height<=300;
+    let isMobile = this.props.width<=400;
     var {
       allValues
       , xValues
@@ -225,6 +227,7 @@ module.exports = React.createClass({
       , yDomain: yDomain
       , dimensions: innerDimensions
     };
+    let units = allValues[0].d.unit;
     let {
       xScale
       , yScale
@@ -240,6 +243,7 @@ module.exports = React.createClass({
           innerDimensions={innerDimensions}
           isMobile={isMobile}
           ref="chart"
+          yAxisLabel={units}
           xDomain={xDomain}
           xScale={xScale}
           xValues={xValues}
