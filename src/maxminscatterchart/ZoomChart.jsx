@@ -18,6 +18,7 @@ import  {
 module.exports = React.createClass({
   displayName: 'ZoomChart',
   propTypes: {
+    currentIndex:           React.PropTypes.number,
     data:                   React.PropTypes.array.isRequired,
     dataMarker:             React.PropTypes.func,
     height:                 React.PropTypes.number.isRequired,
@@ -41,6 +42,7 @@ module.exports = React.createClass({
    ],
   getDefaultProps() {
     return {
+      currentIndex:           0,
       circleRadius:           3,
       className:              'rd3-max-min-scatter-chart',
       hoverAnimation:         true,
@@ -60,7 +62,7 @@ module.exports = React.createClass({
   },
   getInitialState(){
     return {
-      currentValue: null
+      currentValue: this.props.data[this.props.currentIndex].coord
       , zooming: false
     };
   },
@@ -180,6 +182,7 @@ module.exports = React.createClass({
       currentValue
       , zooming
     } = this.state;
+    pdebug(`currentValue: ${JSON.stringify(currentValue)}`);
     pdebug(`#render zooming: ${zooming}`);
     if (!data || data.length < 1) {
       return null;
