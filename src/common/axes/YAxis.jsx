@@ -51,14 +51,16 @@ module.exports = React.createClass({
       zooming:        false
     };
   },
-
+  shouldComponentUpdate(props){
+    if(props.zooming && props.isMobile)return false;
+    return true;
+  },
   render() {
     pdebug('#render');
     var props = this.props;
     let {
-      isMobile
-      , value
-      , xScale
+      value,
+      xScale
     } = this.props;
     value = value || {};
     let {

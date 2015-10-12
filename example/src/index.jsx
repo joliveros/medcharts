@@ -24,11 +24,11 @@ React.render(
   <div>
       <Chart
           data={data}
-          height={300}
-          isMobile={true}
+          height={400}
+          isMobile={false}
           margins={margins}
           strokeWidth={3}
-          width={600}/>
+          width={800}/>
     {/*
       <Chart
           data={data}

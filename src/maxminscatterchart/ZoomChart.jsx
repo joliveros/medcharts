@@ -20,6 +20,7 @@ module.exports = React.createClass({
   propTypes: {
     data:                   React.PropTypes.array.isRequired,
     dataMarker:             React.PropTypes.func,
+    dataMarkerSize:         React.PropTypes.number,
     height:                 React.PropTypes.number.isRequired,
     isMobile:               React.PropTypes.bool,
     margins:                React.PropTypes.object,
@@ -28,10 +29,12 @@ module.exports = React.createClass({
     xAxisClassName:         React.PropTypes.string,
     xAxisStrokeWidth:       React.PropTypes.number,
     xAxisUnit:              React.PropTypes.string,
+    xChartScale:            React.PropTypes.func,
     xScale:                 React.PropTypes.func.isRequired,
     yAxisClassName:         React.PropTypes.string,
     yAxisOffset:            React.PropTypes.number,
     yAxisStrokeWidth:       React.PropTypes.number,
+    yChartScale:            React.PropTypes.func,
     yScale:                 React.PropTypes.func.isRequired
  },
 
@@ -50,7 +53,7 @@ module.exports = React.createClass({
         , left: 45
       },
       dataSeriesStrokeWidth:  2,
-      dataPointRadius:        5,
+      dataMarkerSize:         8,
       xAxisClassName:         'rd3-max-min-scatter-chart-xaxis',
       xAxisStrokeWidth:       1,
       yAxisClassName:         'rd3-max-min-scatter-chart-yaxis',
@@ -58,15 +61,15 @@ module.exports = React.createClass({
     };
   },
   getInitialState(){
-    // let {
-    //   xScale
-    //   , yScale
-    // } = this.props;
+    let {
+      dataMarkerSize
+    } = this.props;
+    let circleRadius = dataMarkerSize/2;
+    pdebug(`initial radius: ${circleRadius}`);
     return {
       currentValue: null
       , zooming: false
-      // , xScale
-      // , yScale
+      , circleRadius: circleRadius
     };
   },
   componentDidMount(){
@@ -97,6 +100,9 @@ module.exports = React.createClass({
   },
   zoomed: function(){
     let {
+      dataMarkerSize
+    } = this.props;
+    let {
       scale
       , translate
     } = d3.event;
@@ -105,6 +111,7 @@ module.exports = React.createClass({
       strokeWidth: this.props.strokeWidth/scale
       , transform: `translate(${translate}) scale(${scale})`
       , transformCircle: `scale(${1/scale})`
+      , circleRadius: dataMarkerSize/2/scale
       , scale: scale
     });
   },
@@ -212,6 +219,7 @@ module.exports = React.createClass({
       , strokeWidth: adjustedStrokeWidth
       , transform: zoom
       , zooming
+      , circleRadius
     } = this.state;
     pdebug(`#render zooming: ${zooming}`);
     if (!data || data.length < 1) {
@@ -239,13 +247,7 @@ module.exports = React.createClass({
                 stroke-width: ${adjustedStrokeWidth || strokeWidth} !important;
               }
               .rd3-scatterchart-voronoi-circle {
-                /*
-                transform: ${transformCircle} !important;
-                -ms-transform: ${transformCircle} !important;
-                -webkit-transform: ${transformCircle} !important;
-                -o-transform: ${transformCircle} !important;
-                -moz-transform: ${transformCircle} !important;
-                 */
+                r: ${circleRadius};
                 stroke-width: ${adjustedStrokeWidth || strokeWidth};
               }
             `}

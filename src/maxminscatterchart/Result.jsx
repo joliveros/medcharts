@@ -19,9 +19,9 @@ module.exports = React.createClass({
       colors:               React.PropTypes.array,
       fullOpacity:          React.PropTypes.number,
       isMobile:             React.PropTypes.bool,
-      key:                  React.PropTypes.number.isRequired,
       markerFill:           React.PropTypes.string,
       markerSize:           React.PropTypes.number,
+      key:                  React.PropTypes.number,
       markerSize:         React.PropTypes.number,
       markerSizeOnHover:  React.PropTypes.number,
       mouseEventAreaWidth:  React.PropTypes.number,
@@ -50,8 +50,9 @@ module.exports = React.createClass({
     let {
       markerSize
     } = this.props;
+    let circleRadius = markerSize/2;
     return {
-      circleRadius: markerSize/2
+      circleRadius: circleRadius
     };
   },
   shouldComponentUpdate(props) {
@@ -135,8 +136,8 @@ module.exports = React.createClass({
       markerSize,
       markerSizeOnHover
     } = this.props;
-    let circleRadius = markerSize/2;
     let circleRadiusOnHover = markerSizeOnHover/2;
+    let circleRadius = markerSize/2;
     this.tweenState('circleRadius', {
       easing: tweenState.easingTypes.easeInBounce
       , duration: animationDuration
@@ -164,8 +165,6 @@ module.exports = React.createClass({
       , className
       , key
       , markerFill: circleFill
-      // , height
-      // , width
       , opacity
       , mouseEventAreaWidth
       , active
@@ -219,7 +218,6 @@ module.exports = React.createClass({
             y2={lcl}/>
         <Circle
             circleFill={circleFill}
-            circleRadius={circleRadius}
             cx={cx}
             cy={cy}
             stroke={normalColor}/>

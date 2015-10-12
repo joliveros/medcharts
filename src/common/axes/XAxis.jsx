@@ -52,7 +52,7 @@ module.exports = React.createClass({
     };
   },
   shouldComponentUpdate(props) {
-    if(props.zooming)return false;
+    if(props.zooming && props.isMobile)return false;
     return true;
   },
   render() {

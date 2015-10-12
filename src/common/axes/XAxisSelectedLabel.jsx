@@ -17,19 +17,19 @@ module.exports = React.createClass({
   displayName: 'XAxisSelectedLabel',
 
   propTypes: {
+    currentValueChange:  React.PropTypes.func,
+    fill:                React.PropTypes.string,
     height:              React.PropTypes.number,
-    width:               React.PropTypes.number,
-    markerHeight:        React.PropTypes.number,
-    maxPostion:          React.PropTypes.number.isRequired,
-    offset:              React.PropTypes.number,
     horizontalTransform: React.PropTypes.string,
-    value:               React.PropTypes.object.isRequired,
+    markerHeight:        React.PropTypes.number,
+    maxPosition:          React.PropTypes.number.isRequired,
+    offset:              React.PropTypes.number,
+    scale:               React.PropTypes.func.isRequired,
     strokeWidth:         React.PropTypes.number,
     textAnchor:          React.PropTypes.string,
-    scale:               React.PropTypes.func.isRequired,
+    value:               React.PropTypes.object.isRequired,
     verticalTransform:   React.PropTypes.string,
-    fill:                React.PropTypes.string,
-    currentValueChange:  React.PropTypes.func
+    width:               React.PropTypes.number
   },
 
   getDefaultProps() {
