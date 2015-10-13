@@ -168,9 +168,16 @@ module.exports = React.createClass({
       opacity,
       mouseEventAreaWidth,
       active,
-      fullOpacity
+      fullOpacity,
+      isMobile
     } = this.props;
-    let circleRadius = this.getTweeningValue('circleRadius');
+    let circleRadius;
+    if(isMobile){
+      circleRadius = this.state.circleRadius;
+    }
+    else{
+      circleRadius = this.getTweeningValue('circleRadius');
+    }
     opacity = this.getTweeningValue('opacity') || opacity;
     if(active){
       opacity = fullOpacity;
