@@ -1,3 +1,4 @@
+
 'use strict';
 
 var React = require('react');
@@ -112,20 +113,20 @@ module.exports = React.createClass({
             scale={props.yScale}
             stroke={props.stroke}
         />
-      {y?
-          <YAxisSelectedLabel
-              markerHeight={markerHeight}
-              maxPosition={props.height}
-              orient={props.yOrient}
-              scale={props.yScale}
-              value={y}/>:null
-        }
         <Label
             height={props.height}
             label={props.yAxisLabel}
             margins={props.margins}
             offset={props.yAxisLabelOffset}
             orient={props.yOrient}/>
+        {y?
+            <YAxisSelectedLabel
+                markerHeight={markerHeight}
+                maxPosition={props.height}
+                orient={props.yOrient}
+                scale={props.yScale}
+                value={y}/>:null
+          }
       </g>
     );
   }
