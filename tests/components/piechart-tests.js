@@ -8,7 +8,7 @@ var TestUtils = React.addons.TestUtils;
 
 describe('PieChart', function() {
   if(process.env.TEST_ENV !== 'karma')
-  
+
   var data = generatePartsOfWhole();
   var values = data.map( (item) => item.value );
 
@@ -44,7 +44,7 @@ describe('PieChart', function() {
 
     var formattedValueTexts = TestUtils.scryRenderedDOMComponentsWithClass(piechart, 'rd3-piechart-value');
     expect(formattedValueTexts.length).to.equal(values.length);
-    expect(formattedValueTexts[0].getDOMNode().textContent).to.contain('$');
+    expect(formattedValueTexts[0].textContent).to.contain('$');
 
   });
 

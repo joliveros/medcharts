@@ -97,7 +97,7 @@ module.exports = React.createClass({
     this.xScaleId = xScale.id;
     this.yScaleId = yScale.id;
     pdebug(`#initZoom ${xScale.id}`);
-    var chartNode = d3.select(this.refs.clipPath.getDOMNode());
+    var chartNode = d3.select(this.refs.clipPath);
     zoom(chartNode);
     zoom.on('zoom', this.zoomed);
     zoom.on('zoomstart', () => {
