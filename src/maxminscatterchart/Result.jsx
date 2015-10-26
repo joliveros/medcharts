@@ -157,6 +157,8 @@ module.exports = React.createClass({
         , d: {
           ucl: _ucl
           , lcl: _lcl
+          , upperBound
+          , lowerBound
         }
       },
       strokeWidth,
@@ -185,11 +187,9 @@ module.exports = React.createClass({
     let [normalColor, abnormalColor] = this.initColorScale().range();
     let ucl = yScale(_ucl);
     let lcl = yScale(_lcl);
-
-    let HalfControlRange = (ucl-lcl)/2;
-    let UpperDangerValue = HalfControlRange + ucl;
-    let LowerDangerValue = lcl - HalfControlRange;
-    let rectHeight = Math.abs(UpperDangerValue - LowerDangerValue);
+    upperBound = yScale(upperBound);
+    lowerBound = yScale(lowerBound);
+    let rectHeight = Math.abs(upperBound - lowerBound);
     // The circle coordinates
     let cx = xScale(x)
     , cy = yScale(y)
@@ -216,14 +216,14 @@ module.exports = React.createClass({
             className="abnormal"
             stroke={abnormalColor}
             strokeWidth={strokeWidth}
-            y1={UpperDangerValue}
+            y1={upperBound}
             y2={ucl}/>
         <Line
             {...lineProps}
             className="abnormal"
             stroke={abnormalColor}
             strokeWidth={strokeWidth}
-            y1={LowerDangerValue}
+            y1={lowerBound}
             y2={lcl}/>
         <Circle
             circleFill={circleFill}
@@ -243,7 +243,7 @@ module.exports = React.createClass({
             onTouchStart={this.onMouseOver}
             width={mouseEventAreaWidth}
             x={_x - mouseEventAreaWidth/2}
-            y={UpperDangerValue}/>
+            y={upperBound}/>
     </g>
     );
   }

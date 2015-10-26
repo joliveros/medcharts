@@ -71,8 +71,9 @@ module.exports = React.createClass({
     xDomain.upperBound = xExtent.upperBound;
     return xDomain;
   },
-  calculateInitialyDomain: function(values) {
-    var refRanges = this.getRefRanges(values);
+  calculateInitialyDomain: function(_values) {
+    var refRanges = this.getRefRanges(_values);
+    let values = _values.map((val) => { return val.coord.y});
     // Array of all lower and upper bounds in the ref range
     var boundRefRanges = _.flatten(_.map(refRanges, function(refRange) {
         if (refRange && refRange.lcl !== undefined && refRange.ucl !== undefined) {
@@ -131,6 +132,10 @@ module.exports = React.createClass({
     // Limit to 3 scientific values bc JavaScript does float math weirdly
     yDomain.lowerBound = +(yDomain.lowerBound.toFixed(3));
     yDomain.upperBound = +(yDomain.upperBound.toFixed(3));
+    values = _values.map((val) => {
+      val.d = {...yDomain, ...val.d}
+      return val;
+    });
     return yDomain;
   },
   getDates: function(values) {
@@ -208,6 +213,12 @@ module.exports = React.createClass({
       yScale: yScale
     };
   },
+  onZoomStart(){
+
+  },
+  onZoomEnd(){
+
+  },
   render() {
     pdebug('#render');
     var props = _.omit(this.props, ['data']);
@@ -227,7 +238,9 @@ module.exports = React.createClass({
       , yDomain: yDomain
       , dimensions: innerDimensions
     };
-    let units = allValues[0].d.unit;
+    let {
+      unit
+    } = allValues[0].d;
     let {
       xScale
       , yScale
@@ -242,11 +255,13 @@ module.exports = React.createClass({
           dataMarker={DataMarker}
           innerDimensions={innerDimensions}
           isMobile={isMobile}
+          onZoomEnd={this.onZoomEnd}
+          onZoomStart={this.onZoomStart}
           ref="chart"
-          yAxisLabel={units}
           xDomain={xDomain}
           xScale={xScale}
           xValues={xValues}
+          yAxisLabel={unit}
           yDomain={yDomain}
           yScale={yScale}
           yValues={yValues}

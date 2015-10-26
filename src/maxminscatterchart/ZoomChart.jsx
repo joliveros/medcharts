@@ -12,7 +12,8 @@ var clipPathStyle = {
 };
 import  {
   sortBy,
-  findIndex
+  findIndex,
+  isDate
 } from 'lodash';
 
 module.exports = React.createClass({
@@ -89,9 +90,15 @@ module.exports = React.createClass({
   initZoom: function(){
     let ctx = this;
     pdebug('#initZoom');
-    var { xScale, yScale } = this.props;
+    var {
+      xScale,
+      yScale
+    } = this.props;
     var zoom = d3.behavior.zoom()
-    .scaleExtent([1, 10]);
+    .scaleExtent([1, 10])
+    .xExtent(xScale.domain())
+    .yExtent(yScale.domain());
+    pdebug(yScale.domain())
     zoom.x(xScale);
     zoom.y(yScale);
     this.xScaleId = xScale.id;
