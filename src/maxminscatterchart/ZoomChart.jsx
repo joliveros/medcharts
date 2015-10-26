@@ -15,7 +15,9 @@ import  {
   findIndex,
   isDate
 } from 'lodash';
-
+const styleZoomIn = {
+  cursor: 'zoom-in'
+};
 module.exports = React.createClass({
   displayName: 'ZoomChart',
   propTypes: {
@@ -79,7 +81,17 @@ module.exports = React.createClass({
     return `translate(${x}, ${this.props.margins.top})`;
   },
   zoomed: function(){
+    pdebug('#zoomed', d3.event.sourceEvent);
+    // d3.event.preventDefault();
+    let {
+      scale
+    } = d3.event;
+    let {
+      currentScale
+    } = this.state;
     this.setState({
+      lastScale: currentScale,
+      currentScale: scale,
       strokeWidth: this.props.strokeWidth
     });
   },
@@ -88,6 +100,7 @@ module.exports = React.createClass({
    * @return {Function} returns zoom instance.
    */
   initZoom: function(){
+    pdebug('mouseRect', this.refs.mouseRect.getScreenCTM());
     let ctx = this;
     pdebug('#initZoom');
     var {
@@ -98,7 +111,6 @@ module.exports = React.createClass({
     .scaleExtent([1, 10])
     .xExtent(xScale.domain())
     .yExtent(yScale.domain());
-    pdebug(yScale.domain())
     zoom.x(xScale);
     zoom.y(yScale);
     this.xScaleId = xScale.id;
@@ -165,6 +177,21 @@ module.exports = React.createClass({
     nextValue.isFirst = nextIndex <= 0;
     this.setState({currentValue: nextValue});
   }
+  , mouseEventRectStyle() {
+    let {
+      currentScale,
+      lastScale,
+      zooming
+    } = this.state;
+    let style = {};
+    // if(zooming === false)
+    // return style;
+    if(currentScale < lastScale)
+    style.cursor = 'zoom-out';
+    if(currentScale > lastScale)
+    style.cursor = 'zoom-in';
+    return style;
+  }
   , render() {
     pdebug('#render');
     var props = this.props;
@@ -194,7 +221,8 @@ module.exports = React.createClass({
     if (!data || data.length < 1) {
       return null;
     }
-
+    let mouseEventRectStyle = this.mouseEventRectStyle();
+    clipPathStyle = {...clipPathStyle, ...mouseEventRectStyle};
     return (
       <Chart
           colorAccessor={props.colorAccessor}
@@ -226,67 +254,72 @@ module.exports = React.createClass({
         <g
             className={props.className}
             transform={transform}>
-          <XAxis
-              currentValueChange={this.changeCurrentValue}
-              data={data}
-              gridVertical={props.gridVertical}
-              gridVerticalStroke={props.gridVerticalStroke}
-              gridVerticalStrokeDash={props.gridVerticalStrokeDash}
-              gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
-              height={innerHeight}
-              isMobile={isMobile}
-              margins={margins}
-              ref="xAxis"
-              stroke={props.axesColor}
-              strokeWidth={props.xAxisStrokeWidth.toString()}
-              tickFormatting={props.xAxisFormatter}
-              tickSize={0}
-              value={currentValue}
-              width={innerWidth}
-              xAxisClassName={props.xAxisClassName}
-              xAxisLabel={props.xAxisLabel}
-              xAxisLabelOffset={props.xAxisLabelOffset}
-              xAxisOffset={props.xAxisOffset}
-              xAxisTickInterval={props.xAxisTickInterval}
-              xAxisTickValues={props.xAxisTickValues}
-              xOrient={props.xOrient}
-              xScale={xScale}
-              yOrient={props.yOrient}
-              yScale={yScale}
-              zooming={zooming}
-          />
-          <YAxis
-              currentValueChange={this.changeCurrentValue}
-              data={data}
-              gridHorizontal={props.gridHorizontal}
-              gridHorizontalStroke={props.gridHorizontalStroke}
-              gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
-              gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
-              height={innerHeight}
-              isMobile={isMobile}
-              margins={margins}
-              stroke={props.axesColor}
-              strokeWidth={props.yAxisStrokeWidth.toString()}
-              tickFormatting={props.yAxisFormatter}
-              tickSize={0}
-              value={currentValue}
-              width={innerWidth}
-              xOrient={props.xOrient}
-              xScale={xScale}
-              yAxisClassName={props.yAxisClassName}
-              yAxisLabel={props.yAxisLabel}
-              yAxisLabelOffset={props.yAxisLabelOffset}
-              yAxisOffset={props.yAxisOffset}
-              yAxisTickCount={props.yAxisTickCount}
-              yAxisTickValues={props.yAxisTickValues}
-              yOrient={props.yOrient}
-              yScale={yScale}
-              zooming={zooming}
-          />
+        {zooming && isMobile ? null :
+          <g>
+            <XAxis
+                currentValueChange={this.changeCurrentValue}
+                data={data}
+                gridVertical={props.gridVertical}
+                gridVerticalStroke={props.gridVerticalStroke}
+                gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+                gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+                height={innerHeight}
+                isMobile={isMobile}
+                margins={margins}
+                ref="xAxis"
+                stroke={props.axesColor}
+                strokeWidth={props.xAxisStrokeWidth.toString()}
+                tickFormatting={props.xAxisFormatter}
+                tickSize={0}
+                value={currentValue}
+                width={innerWidth}
+                xAxisClassName={props.xAxisClassName}
+                xAxisLabel={props.xAxisLabel}
+                xAxisLabelOffset={props.xAxisLabelOffset}
+                xAxisOffset={props.xAxisOffset}
+                xAxisTickInterval={props.xAxisTickInterval}
+                xAxisTickValues={props.xAxisTickValues}
+                xOrient={props.xOrient}
+                xScale={xScale}
+                yOrient={props.yOrient}
+                yScale={yScale}
+                zooming={zooming}
+            />
+            <YAxis
+                currentValueChange={this.changeCurrentValue}
+                data={data}
+                gridHorizontal={props.gridHorizontal}
+                gridHorizontalStroke={props.gridHorizontalStroke}
+                gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+                gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+                height={innerHeight}
+                isMobile={isMobile}
+                margins={margins}
+                stroke={props.axesColor}
+                strokeWidth={props.yAxisStrokeWidth.toString()}
+                tickFormatting={props.yAxisFormatter}
+                tickSize={0}
+                value={currentValue}
+                width={innerWidth}
+                xOrient={props.xOrient}
+                xScale={xScale}
+                yAxisClassName={props.yAxisClassName}
+                yAxisLabel={props.yAxisLabel}
+                yAxisLabelOffset={props.yAxisLabelOffset}
+                yAxisOffset={props.yAxisOffset}
+                yAxisTickCount={props.yAxisTickCount}
+                yAxisTickValues={props.yAxisTickValues}
+                yOrient={props.yOrient}
+                yScale={yScale}
+                zooming={zooming}
+            />
+          </g>
+        }
         <g
             ref="clipPath"
             style={clipPathStyle}>
           <rect
+              ref="mouseRect"
               fill="transparent"
               height={innerHeight}
               width={innerWidth}/>

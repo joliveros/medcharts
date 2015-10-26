@@ -27,7 +27,7 @@ React.render(
           height={400}
           margins={margins}
           strokeWidth={3}
-          width={400}/>
+          width={600}/>
   </div>
   , document.getElementById('app')
 );

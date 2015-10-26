@@ -10,6 +10,9 @@ import moment from 'moment';
 const baseClassName = 'selected-value-label';
 const arrowClassName = `${baseClassName}-arrow`;
 const containerClassName = `${baseClassName}-container`;
+const arrowStyle = {
+  cursor: 'pointer'
+};
 const textStyle = {
   "alignment-baseline":"center"
 };
@@ -239,6 +242,7 @@ module.exports = React.createClass({
                         fill="transparent"
                         height={height}
                         onClick={this.onClickLeft}
+                        style={arrowStyle}
                         transform={`translate(${-width/8},0)`}
                         width={width/2}/>
                 </g>
@@ -255,6 +259,7 @@ module.exports = React.createClass({
                         fill="transparent"
                         height={height}
                         onClick={this.onClickRight}
+                        style={arrowStyle}
                         transform={`translate(${-width/8},-${arrowOffset})`}
                         width={width/2}/>
                 </g>

@@ -1,3 +1,11 @@
+// - for panning, need to use 'cursor: grabbing' when panning, and maybe 'cursor: grab' when in grabbable area (although maybe not since need to indicate that we’re able to zoom as well)
+// - need to make sure the arrow on the select dragger has 'cursor: pointer’ on hover
+// - sometimes there are both '<' and '>' on the date picker even if the result is the last or first result in the series
+// - on a result page with just two results, when switching back and forth between the results, sometimes the date selector disapears until panning (not just iOS)
+// - if the currently selected result is out of the screen, should have some indication that it’s up there
+// - also prevent scrolling of the page while panning or zooming
+// - for the lab test card, need to enable 'cursor: pointer' on entire clickable element
+// - need to hide the 'current value bar' (i.e., the one above the historical chart) when the historical chart is open
 'use strict';
 
 var React = require('react');
