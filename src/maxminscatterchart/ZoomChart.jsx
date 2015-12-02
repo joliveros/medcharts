@@ -7,8 +7,8 @@ var DataSeries = require('./DataSeries');
 var pdebug = require('../debug')('ZoomChart');
 var { ViewBoxMixin } = require('../mixins');
 var clipPathStyle = {
-  'clip-path':'url(#chart-area-clip)',
-  'pointer-events':'all'
+  clipPath:'url(#chart-area-clip)',
+  pointerEvents:'all'
 };
 import  {
   sortBy,
@@ -231,7 +231,6 @@ module.exports = React.createClass({
           height={height}
           legend={props.legend}
           margins={margins}
-          ref="Chart"
           title={props.title}
           viewBox={this.getViewBox()}
           width={width}>
@@ -251,10 +250,8 @@ module.exports = React.createClass({
                 y="0"/>
           </clipPath>
         </defs>
-        <g
-            className={props.className}
-            transform={transform}>
-        {zooming && isMobile ? null :
+        <g className={props.className}
+           transform={transform}>
           <g>
             <XAxis
                 currentValueChange={this.changeCurrentValue}
@@ -266,7 +263,6 @@ module.exports = React.createClass({
                 height={innerHeight}
                 isMobile={isMobile}
                 margins={margins}
-                ref="xAxis"
                 stroke={props.axesColor}
                 strokeWidth={props.xAxisStrokeWidth.toString()}
                 tickFormatting={props.xAxisFormatter}
@@ -314,16 +310,13 @@ module.exports = React.createClass({
                 zooming={zooming}
             />
           </g>
-        }
-        <g
-            ref="clipPath"
-            style={clipPathStyle}>
-          <rect
-              ref="mouseRect"
-              fill="transparent"
-              height={innerHeight}
-              width={innerWidth}/>
-          <DataSeries
+          <g ref="clipPath"
+             style={clipPathStyle}>
+            <rect ref="mouseRect"
+                  fill="transparent"
+                  height={innerHeight}
+                  width={innerWidth}/>
+            <DataSeries
               currentValue={currentValue}
               data={data}
               DataMarker={dataMarker}
@@ -335,8 +328,8 @@ module.exports = React.createClass({
               xScale={xScale}
               yScale={yScale}
               zooming={zooming}
-              />
-        </g>
+            />
+          </g>
         </g>
       </Chart>
     );

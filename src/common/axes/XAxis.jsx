@@ -84,7 +84,6 @@ module.exports = React.createClass({
     return (
       <g
           className={props.xAxisClassName}
-          ref='axis'
           transform={translate}>
           <AxisTicks
               gridVertical={props.gridVertical}

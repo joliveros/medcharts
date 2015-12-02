@@ -2,13 +2,10 @@
 
 var React = require('react');
 var pdebug = require('../../debug')('YAxisSelectedLabel');
-import tweenState
-, {
-  Mixin as tweenStateMixin
-} from 'react-tween-state';
+import tweenState, { Mixin as tweenStateMixin } from 'react-tween-state';
 const baseClassName = 'selected-value-label';
 const textStyle = {
-  "alignment-baseline":"center"
+  alignmentBaseline: "center"
 };
 module.exports = React.createClass({
   displayName: 'YAxisSelectedLabel',
@@ -122,7 +119,7 @@ module.exports = React.createClass({
       ctx.tweenState(key, opts);
     });
   }
-  , async initPosition(props){
+  , initPosition(props){
     let ctx = this;
     props = props || this.props;
     let {
@@ -138,13 +135,14 @@ module.exports = React.createClass({
     let {
       animationDuration
     } = this.props;
-    await ctx.animateState('position', {
+    return ctx.animateState('position', {
       easing: tweenState.easingTypes.easeOutQuart
       , duration: animationDuration + 200
       , beginValue: previous
       , endValue: newPosition
+    }).then(function() {
+      this.setState({markerHeight: markerHeight});
     });
-    this.setState({markerHeight: markerHeight});
   }
   , initVisibility(){
     if(this.isVisible()){

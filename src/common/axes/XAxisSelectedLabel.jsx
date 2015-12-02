@@ -14,7 +14,7 @@ const arrowStyle = {
   cursor: 'pointer'
 };
 const textStyle = {
-  "alignment-baseline":"center"
+  alignmentBaseline: "center"
 };
 const leftPath = "M1171 1235l-531 -531l531 -531q19 -19 19 -45t-19 -45l-166 -166q-19 -19 -45 -19t-45 19l-742 742q-19 19 -19 45t19 45l742 742q19 19 45 19t45 -19l166 -166q19 -19 19 -45t-19 -45z";
 const rightPath = "M1107 659l-742 -742q-19 -19 -45 -19t-45 19l-166 166q-19 19 -19 45t19 45l531 531l-531 531q-19 19 -19 45t19 45l166 166q19 19 45 19t45 -19l742 -742q19 -19 19 -45t-19 -45z";
@@ -142,7 +142,7 @@ module.exports = React.createClass({
       ctx.tweenState(key, opts);
     });
   }
-  , async initPosition(props){
+  , initPosition(props){
     let ctx = this;
     props = props || this.props;
     let {
@@ -158,13 +158,14 @@ module.exports = React.createClass({
     let {
       animationDuration
     } = this.props;
-    await ctx.animateState('position', {
+    return ctx.animateState('position', {
       easing: tweenState.easingTypes.easeOutQuart
       , duration: animationDuration + 200
       , beginValue: previous
       , endValue: newPosition
+    }).then(function() {
+      ctx.setState({markerHeight: markerHeight});
     });
-    this.setState({markerHeight: markerHeight});
   }
   , initVisibility(){
     if(this.isVisible()){

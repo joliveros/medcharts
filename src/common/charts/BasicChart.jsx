@@ -30,9 +30,7 @@ module.exports = React.createClass({
 
     if (props.title != null) {
       return (
-        <h4
-          className={props.titleClassName}
-        >
+        <h4 className={props.titleClassName}>
           {props.title}
         </h4>
       );
@@ -45,12 +43,10 @@ module.exports = React.createClass({
     var props = this.props;
 
     return (
-      <svg
-        className={props.svgClassName}
-        height={props.height}
-        viewBox={props.viewBox}
-        width={props.width}
-      >
+      <svg className={props.svgClassName}
+           height={props.height}
+           viewBox={props.viewBox}
+           width={props.width}>
         {props.children}
       </svg>
     );
@@ -60,9 +56,7 @@ module.exports = React.createClass({
     var props = this.props;
 
     return (
-      <div
-        className={props.className}
-      >
+      <div className={props.className}>
         {this._renderTitle()}
         {this._renderChart()}
       </div>

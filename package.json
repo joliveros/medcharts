@@ -6,14 +6,12 @@
   "homepage": "",
   "keywords": [],
   "license": "MIT",
-  "main": "./dist/js/index.js",
+  "main": "./src/index.js",
   "engines": {
     "node": "0.12.x"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
-    "babel-core": "^5.8.25",
-    "babel-plugin-react-transform": "^1.1.1",
+    "babelify": "^6.4.0",
     "browserify": "~11.2.0",
     "chai": "^3.3.0",
     "convert-hex": "^0.1.0",
@@ -51,47 +49,29 @@
     "mocha": "^2.3.3",
     "react-proxy": "^1.x",
     "react-tools": "^0.13.3",
-    "reactify": "^1.1.1",
     "uglify-js": "^2.5.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0",
     "yargs": "^3.27.0"
   },
+  "peerDependencies": {
+    "react": ">=0.14.0",
+    "react-dom": ">=0.14.0"
+  },
   "dependencies": {
-    "babel": "^5.8.23",
-    "babelify": "^6.3.0",
     "convert-hex": "^0.1.0",
     "d3": "git+ssh://git@github.com:joliveros/d3.git#extent",
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "ms": "^0.7.1",
-    "react": "^0.14.0",
     "react-tween-state": "^0.1.3"
   },
   "scripts": {
     "gulp": "NODE_ENV=development node_modules/.bin/babel-node `which gulp`",
-    "prepublish": "npm run build",
     "env": "env",
-    "test": "node_modules/.bin/mocha --full-trace --compilers js:babel/register --recursive tests/setup.js ./tests",
-    "watch": "DEBUG=react-d3* node_modules/.bin/mocha -w --compilers js:babel/register --watch-extensions js,jsx --recursive tests/setup.js ./tests/*",
-    "build": "rm -rf dist/js/* && mkdir -p dist/js && NODE_ENV=production node_modules/.bin/babel --stage 2 src --out-dir dist/js",
-    "minified": "gulp release && NODE_ENV=production browserify -t [ reactify --es6 ] --standalone rd3 ./build/cjs/index.js | uglifyjs -c > dist/public/js/react-d3.min.js"
-  },
-  "browserify-shim": {},
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
-        }
-      ]
-    ]
+    "test": "node_modules/.bin/mocha --full-trace --compilers js:babel/register --recursive tests/setup.js ./tests"
   },
   "repository": {
     "type": "git",
